@@ -4,15 +4,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="./assets/ultraviolet.png" type="image/png">
-  <title>Ultraviolet</title>
+  <link rel="shortcut icon" href="" type="image/png">
+  <title>cloverium</title>
 
   <!-- Meta tags for SEO -->
-  <meta property="og:title" content="Ultraviolet">
+  <meta property="og:title" content="Potato">
   <meta property="og:description"
-    content="Ultraviolet is a web proxy for unblocking websites using service workers and interception." />
-  <meta property="og:image" content="/assets/ultraviolet.png" />
-  <meta name="theme-color" content="#262262" />
+    content="The gateway to open Restriction at school" />
+  <meta property="og:image" content="" />
 
   <!-- Styles and fonts -->
   <link rel="stylesheet" href="./assets/style.css">
@@ -21,6 +20,222 @@
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
     rel="stylesheet">
+  <style>
+    /* Some styling to make it look good */
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #FFFFFF;
+  color: white;
+  height: 100vh;
+  width: 100vw;
+  font-family: 'IBM Plex Sans';
+}
+
+.container {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2; /* Ensure the search input is above the particles */
+
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 18px;
+}
+
+.header {
+  font-size: 42px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon {
+  height: 42px;
+  width: 42px;
+}
+
+.description {
+  font-size: 16px;
+  color: #afafaf;
+}
+
+.input {
+  width: 130%; /* Adjusted width for a longer search input */
+  background-color: transparent;
+  border: 1.5px gray solid;
+  border-radius: 5px;
+  font-size: 20px;
+  text-align: center;
+  color: white;
+  outline: none;
+  height: 50px;
+  transition: color;
+  transition-duration: 100ms;
+}
+
+
+.input:disabled {
+  color: #757575;
+}
+
+.logo {
+  height: 55px;
+  width: 55px;
+  /* padding: 1.5em; */
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 24px #685dff);
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+
+  padding: 18px;
+  padding-left: 24px;
+  padding-right: 30px;
+}
+
+.footer a,
+.footer a:visited {
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  text-decoration: none;
+  text-underline-offset: 2.5px;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.footer div {
+  display: flex;
+  gap: 26px;
+}
+        body {
+        margin: 0;
+        overflow: hidden;
+        background-color: #000;
+    }
+    .par {
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        z-index: 1; /* Ensure particles are displayed behind the search input */
+    }
+    .particle {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: #fff;
+        border-radius: 50%;
+        animation: move 5s linear infinite;
+    }
+    @keyframes move {
+        0% {
+            transform: translateY(0) translateX(0) scale(1);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(-100vh) translateX(100vw) scale(0);
+            opacity: 0;
+        }
+    }
+
+    /* Styles for settings tab and button */
+    .settings-tab {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #ffffff ;
+      color: rgb(0, 0, 0);
+      padding: 20px;
+      border-radius: 5px;
+      display: none; /* Hide the settings tab by default */
+      z-index: 1000; /* Ensure the settings tab is above other elements */
+    }
+    
+    .settings-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background-image: url('https://www.svgrepo.com/show/498932/settings.svg'); /* Replace 'path/to/your/image.png' with the actual path to your image */
+      background-size: cover;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 1000; /* Ensure the button is above other elements */
+      transition-duration: 1s;
+    }
+    
+    .settings-button:hover {
+      transform: rotate(360deg);
+    }
+    
+    input[type=file]::file-selector-button {
+      background-color: gray;
+      border-radius: 8px;
+      border: none;
+      padding: 5px;
+    }
+     .blank {
+     text-align: center;
+     margin-top: 20px;
+        }
+     .blankbutton {
+      background-color: grey;
+      padding: 5px;
+      border-radius: 8px; 
+      border: none;
+      outline: none; 
+      cursor: pointer;
+        }
+      .blankbutton:hover {
+       background-color: lightgrey; 
+        }
+    
+       body {
+       --pink-color: #ffb6c1; /* Ice theme */
+            transition: background-color 0.5s;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+       .theme-button {
+       background-color: rgb(0, 0, 0); 
+       border: none;
+       color: white;
+       padding: 10px 20px;
+       margin: 0 5px;
+       cursor: pointer;
+       border-radius: 5px;
+        }
+   
+  </style>
 
   <!-- Scripts -->
   <script src="./uv/uv.bundle.js"></script>
@@ -29,41 +244,94 @@
 
 </head>
 
-<body>
+<body style="background-color: var(--pink-color);">
   <div class="container">
     <h1 class="header">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon">
-        <path d="M20 22h-2" />
-        <path d="M20 15v2h-2" />
-        <path d="M4 19.5V15" />
-        <path d="M20 8v3" />
-        <path d="M18 2h2v2" />
-        <path d="M4 11V9" />
-        <path d="M12 2h2" />
-        <path d="M12 22h2" />
-        <path d="M12 17h2" />
-        <path d="M8 22H6.5a2.5 2.5 0 0 1 0-5H8" />
-        <path d="M4 5v-.5A2.5 2.5 0 0 1 6.5 2H8" />
-      </svg>
-      Ultraviolet Template
+      cloverium
     </h1>
-    <p class="description">A template for creating your own Ultraviolet proxy</p>
+    <p class="description">Welcome to cloverium</p>
     <input type="text" class="input" placeholder="Enter a search query or URL">
   </div>
+  <a href="https://github.com/proudparrot2/ultraviolet" target="_blank">GitHub</a>
+  <a href="https://github.com/titaniumnetwork-dev/ultraviolet" target="_blank">Ultraviolet</a>
+<div class="par">
+</div>
 
-  <div class="footer">
-    <div>
-      <img src="./assets/ultraviolet.png" class="logo">
+  <!-- Settings tab -->
+  <div class="settings-tab" id="settingsTab">
+    <h2 style="background-color:transparent;">Site Settings</h2>
+    <label style="background-color: transparent" for="siteName">Site Name:</label>
+    <input style="background-color: white; padding: 5px; border-radius: 4px; border: none;" type="text" id="siteName" placeholder="Enter new site name"><br><br>
+    <label style="background-color: transparent" for="favicon">Favicon:</label>
+    <input style="border-radius: 5px; background-color: transparent; padding: 5px;" type="file" id="favicon"><br><br>
+    <button style="background-color: gray; padding: 5px; border-radius: 8px; border: none;" onclick="saveSettings()">Save</button>
+    <button style="background-color: gray; padding: 5px; border-radius: 8px; border: none;" onclick="closeSettings()">Close</button>
+    <div style="background-color: transparent;" class="blank">
+    <button style="background-color: grey; padding: 5px border-radius: 8px; border: none;" class="blankbutton" onclick="aboutblank()">Launch About:Blank</button>
     </div>
-
-    <div>
-      <a href="https://github.com/proudparrot2/ultraviolet" target="_blank">GitHub</a>
-      <a href="https://github.com/titaniumnetwork-dev/ultraviolet" target="_blank">Ultraviolet</a>
+    <div style="background-color: transparent;" class="panic">
+    <button onclick="panicButton()" style="background-color: grey; padding: 5px 20px; border: none; border-radius: 5px; color: white; font-weight: none; cursor: pointer;">
+            Panic Button
+       </button>
+    </div>
+    <h3 style="background-color: transparent;">
+    </h3>
+    <div style="background-color: transparent;" class="Themes">
     </div>
   </div>
 
+  <!-- Button to open settings -->
+  <div class="settings-button" onclick="openSettings()"></div>
+
   <script src="./assets/script.js" defer></script>
+  <script>
+    
+    function openSettings() {
+      document.getElementById('settingsTab').style.display = 'block';
+    }
+
+    function closeSettings() {
+      document.getElementById('settingsTab').style.display = 'none';
+    }
+
+    function saveSettings() {
+      const siteName = document.getElementById('siteName').value;
+      document.title = siteName; // Update the site name
+      
+      closeSettings();
+    }
+
+    // JavaScript for particles animation
+    const container = document.querySelector('.par');
+    const numParticles = 100;
+
+    for (let i = 0; i < numParticles; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.top = Math.random() * 100 + 'vh';
+      particle.style.left = Math.random() * 100 + 'vw';
+      particle.style.animationDuration = (Math.random() * 5 + 1) + 's';
+      container.appendChild(particle);
+    }
+    // Blank script
+      function aboutblank() {
+        var win = window.open(); var url = 'home.html'; var iframe = win.document.createElement('iframe'); iframe.style="position:fixed;width:100vw;height:100vh;top:0px;left:0px;right:0px;bottom:0px;z-index:2147483647;background-color:white;border:none;"; iframe.src = url; win.document.body.appendChild(iframe);
+      }
+    // Panic button script
+     function panicButton() {
+     window.close();
+     window.open('https://google.com', '_blank');
+        }
+    // Themes script
+         function changeTheme(color) {
+            document.body.style.backgroundColor = `var(${color})`;
+        }
+        
+        function resetTheme() {
+            document.body.style.backgroundColor = `#082E5F`;
+        }
+  </script>
 </body>
+  <script type='text/javascript' src='//pl22954138.profitablegatecpm.com/2e/cf/30/2ecf304fffe5a7ca6209c38d4cf10d6d.js'></script>
 
 </html>
