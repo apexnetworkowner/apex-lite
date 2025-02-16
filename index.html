@@ -1,659 +1,646 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apex Proxy</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apex Proxy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    /* BASIC RESET & TYPOGRAPHY */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+    }
+    :root {
+      --primary: #9333EA;
+      --secondary: #E879F9;
+      --accent: #F0ABFC;
+      --background: #0A0118;
 
-        :root {
-            --primary: #9333EA;
-            --secondary: #E879F9;
-            --accent: #F0ABFC;
-            --background: #0A0118;
-        }
+      /* Scrollbar defaults */
+      --scrollbar-thumb-color: #9CA3AF;
+      --scrollbar-track-color: #1F2937;
+      --scrollbar-thumb-hover-color: #757575;
+    }
 
-        body {
-            background-color: var(--background);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-        }
+    body {
+      background-color: var(--background);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
 
-        #stars-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
+    /* BACKGROUND VIDEO */
+    #background-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
 
-        .container {
-            position: relative;
-            z-index: 1;
-            width: 90%;
-            max-width: 600px;
-            text-align: center;
-        }
+    /* CONTAINER */
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+    }
 
-        .title {
-            font-size: 4rem;
-            font-weight: bold;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 40px rgba(147, 51, 234, 0.3);
-        }
+    .title {
+      font-size: 4rem;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 40px rgba(147, 51, 234, 0.3);
+    }
 
-        .search-container {
-            position: relative;
-            margin-bottom: 2rem;
-        }
+    /* SEARCH BAR & RECOMMENDATIONS */
+    .search-container {
+      position: relative;
+      margin-bottom: 2rem;
+    }
 
-        .search-input {
-            width: 100%;
-            padding: 1rem 1.5rem;
-            font-size: 1.1rem;
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px solid var(--primary);
-            border-radius: 50px;
-            color: white;
-            outline: none;
-            transition: all 0.3s ease;
-        }
+    .search-input {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      font-size: 1.1rem;
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid var(--primary);
+      border-radius: 50px;
+      color: white;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    .search-input:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+    }
 
-        .search-input:focus {
-            border-color: var(--secondary);
-            box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
-        }
+    .recommendations {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--primary);
+      border-radius: 10px;
+      margin-top: 0.5rem;
+      display: none;
+      backdrop-filter: blur(10px);
+    }
+    .recommendation-item {
+      padding: 0.75rem 1rem;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      color: var(--primary);
+    }
+    .recommendation-item:hover {
+      background: rgba(147, 51, 234, 0.2);
+    }
 
-        .recommendations {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid var(--primary);
-            border-radius: 10px;
-            margin-top: 0.5rem;
-            display: none;
-            backdrop-filter: blur(10px);
-        }
+    /* SETTINGS BUTTON & PANEL */
+    .settings-btn {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      padding: 0.5rem;
+      font-size: 1.5rem;
+      transition: color 0.3s;
+    }
+    .settings-btn:hover {
+      color: var(--secondary);
+    }
 
-        .recommendation-item {
-            padding: 0.75rem 1rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            color: var(--primary);
-        }
+    .settings-panel {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.9);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 2px solid var(--primary);
+      display: none;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      min-width: 300px;
+    }
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .settings-title {
+      font-size: 1.5rem;
+      color: var(--primary);
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 1.5rem;
+    }
 
-        .recommendation-item:hover {
-            background: rgba(147, 51, 234, 0.2);
-        }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 5;
+    }
 
-        .settings-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-            padding: 0.5rem;
-            font-size: 1.5rem;
-            transition: color 0.3s;
-        }
+    /* THEME SELECTOR & SWITCHES */
+    .theme-selector {
+      margin-bottom: 1rem;
+      max-height: 200px; /* Just to limit the height for demonstration */
+      overflow-y: scroll;
+      scrollbar-width: thin; 
+      scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color);
+    }
+    .theme-selector::-webkit-scrollbar {
+      width: 8px;
+    }
+    .theme-selector::-webkit-scrollbar-track {
+      background: var(--scrollbar-track-color);
+    }
+    .theme-selector::-webkit-scrollbar-thumb {
+      background-color: var(--scrollbar-thumb-color);
+      border-radius: 4px;
+    }
+    .theme-selector::-webkit-scrollbar-thumb:hover {
+      background-color: var(--scrollbar-thumb-hover-color);
+    }
 
-        .settings-btn:hover {
-            color: var (--secondary);
-        }
+    .theme-btn {
+      padding: 0.5rem 1rem;
+      margin: 0.25rem;
+      border: 1px solid var(--primary);
+      background: rgba(0, 0, 0, 0.3);
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .theme-btn:hover {
+      background: var(--primary);
+    }
 
-        .settings-panel {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            padding: 2rem;
-            border-radius: 15px;
-            border: 2px solid var(--primary);
-            display: none;
-            z-index: 10;
-            backdrop-filter: blur(10px);
-            min-width: 300px;
-        }
-
-        .settings-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .settings-title {
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            color: var(--primary);
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-
-        .theme-selector {
-            margin-bottom: 1rem;
-        }
-
-        .theme-btn {
-            padding: 0.5rem 1rem;
-            margin: 0.25rem;
-            border: 1px solid var(--primary);
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .theme-btn:hover {
-            background: var(--primary);
-        }
-
-        .switch-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 1rem 0;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 50px;
-            height: 24px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.3);
-            transition: .4s;
-            border-radius: 24px;
-            border: 1px solid var(--primary);
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 3px;
-            background-color: var(--primary);
-            transition: .4s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--primary);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(26px);
-            background-color: white;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: none;
-            z-index: 5;
-        }
-		.theme-selector {
-  overflow-y: scroll;
-  /* Other styles for your theme selector */
-  scrollbar-width: thin; /* Firefox */
-  scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color); /* Firefox */
+    .switch-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 1rem 0;
+    }
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+	/* Style the tab bar */
+#tab-bar {
+  display: flex;
+  align-items: center;
+  background: #1c1c1c;
+  padding: 0.5rem;
 }
 
-.theme-selector::-webkit-scrollbar {
-  width: 8px; /* Width of the scrollbar */
+#tab-list {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-grow: 1;
 }
 
-.theme-selector::-webkit-scrollbar-track {
-  background: var(--scrollbar-track-color); /* Color of the track */
+#tab-list li {
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  background: var(--primary);
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-.theme-selector::-webkit-scrollbar-thumb {
-  background-color: var(--scrollbar-thumb-color); /* Color of the thumb */
-  border-radius: 4px; /* Rounded corners for the thumb */
+#tab-list li.active {
+  background: var(--secondary);
 }
 
-.theme-selector::-webkit-scrollbar-thumb:hover {
-  background-color: var(--scrollbar-thumb-hover-color); /* Color of the thumb on hover */
+/* New tab button */
+#new-tab {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
-/* Define your color variables.  These can be tied to your themes if you want. */
-:root {
-  --scrollbar-thumb-color: #9CA3AF; /* Example: Light gray */
-  --scrollbar-track-color: #1F2937; /* Example: Darker gray */
-  --scrollbar-thumb-hover-color: #757575; /* Example: Slightly darker gray */
+/* Tab content container */
+.display {
+  display: none;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 90%;
+  z-index: 15;
 }
 
-/* Example of how to tie the scrollbar colors to a theme (e.g. 'cosmic') */
-body.cosmic-theme { /* Assuming you add a class to the body */
-    --scrollbar-thumb-color: #E879F9;
-    --scrollbar-track-color: #0A0118;
-    --scrollbar-thumb-hover-color: #F0ABFC;
+/* Make the active tab visible */
+.display.active {
+  display: block;
 }
 
-/* And other themes... */
-body.nebula-theme {
-    --scrollbar-thumb-color: #60A5FA;
-    --scrollbar-track-color: #010B18;
-    --scrollbar-thumb-hover-color: #93C5FD;
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.3);
+      transition: .4s;
+      border-radius: 24px;
+      border: 1px solid var(--primary);
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 3px;
+      background-color: var(--primary);
+      transition: .4s;
+      border-radius: 50%;
+    }
+    input:checked + .slider {
+      background-color: var(--primary);
+    }
+    input:checked + .slider:before {
+      transform: translateX(26px);
+      background-color: white;
+    }
+
+    /* TOOLBAR & IFRAME DISPLAY */
+    #display {
+      display: none; 
+      position: fixed; 
+      left: 0px; 
+      z-index: 15;
+    }
+
+    #toolbar {
+      background-color: #1c1c1c; 
+      width: 100%; 
+      top: 0px; 
+      position: fixed; 
+      left: 0px; 
+      height: 10%; 
+      display: flex;
+      align-items: center;
+    }
+
+    .toolbar-icon {
+      font-size: 38px;
+      color: white;
+      cursor: pointer;
+      margin-left: 2%;
+    }
+
+    .home-icon {
+      margin-left: 3%;
+    }
+
+    .forward-icon {
+      margin-left: 2%;
+    }
+	/* Replace your existing .toolbar-icon rule with: */
+.toolbar-icon {
+  font-size: 38px;
+  color: var(--secondary); /* Icons now match the theme's secondary color */
+  cursor: pointer;
+  margin-left: 2%;
 }
-    </style>
+
+/* Optional: change hover state if desired */
+.toolbar-icon:hover {
+  color: var(--primary); /* or keep it the same, or choose another color */
+}
+
+  </style>
 </head>
 <body>
-    <canvas id="stars-canvas"></canvas>
-    
-    <div class="container">
-        <h1 class="title">APEX PROXY</h1>
-        <div class="search-container">
-            <input type="text" class="search-input" placeholder="Enter URL or search query...">
-            <div class="recommendations"></div>
-        </div>
+  <!-- BACKGROUND VIDEO -->
+  <video autoplay muted loop id="background-video">
+    <source src="https://videos.pexels.com/video-files/3051489/3051489-uhd_2560_1440_25fps.mp4" type="video/mp4">
+  </video>
+
+  <!-- MAIN CONTAINER -->
+  <div class="container">
+    <h1 class="title">APEX Proxy Lite</h1>
+    <div class="search-container">
+      <input type="text" class="search-input" placeholder="Enter URL or search query..."/>
+      <div class="recommendations"></div>
     </div>
-    <!-- Scripts -->
-    <script src="./uv/uv.bundle.js"></script>
-    <script src="./uv/uv.config.js"></script>
-    <script src="./assets/register-sw.js"></script>
-    
-    <button class="settings-btn">⚙️</button>
+  </div>
 
-    <div class="overlay"></div>
-    
-    <div class="settings-panel">
-        <div class="settings-header">
-            <span class="settings-title">Settings</span>
-            <button class="close-btn">✖</button>
-        </div>
-<div class="theme-selector" style="overflow-y: scroll;">
-  <h3>Themes</h3>
-  <button class="theme-btn" data-theme="cosmic">Cosmic</button>
-  <button class="theme-btn" data-theme="nebula">Nebula</button>
-  <button class="theme-btn" data-theme="aurora">Aurora</button>
-  <button class="theme-btn" data-theme="solstice">Solstice</button>
-  <button class="theme-btn" data-theme="ocean">Ocean</button>
-  <button class="theme-btn" data-theme="forest">Forest</button>
-  <button class="theme-btn" data-theme="desert">Desert</button>
-  <button class="theme-btn" data-theme="twilight">Twilight</button>
-  <button class="theme-btn" data-theme="mountain">Mountain</button>
-  <button class="theme-btn" data-theme="candy">Candy</button>
-  <button class="theme-btn" data-theme="sunset">Sunset</button>
-  <button class="theme-btn" data-theme="rainforest">Rainforest</button>
-  <button class="theme-btn" data-theme="arctic">Arctic</button>
-  <button class="theme-btn" data-theme="fire">Fire</button>
-  <button class="theme-btn" data-theme="lavender">Lavender</button>
-  <button class="theme-btn" data-theme="mint">Mint</button>
-  <button class="theme-btn" data-theme="stone">Stone</button>
-  <button class="theme-btn" data-theme="citrus">Citrus</button>
-  <button class="theme-btn" data-theme="rose">Rose</button>
-  <button class="theme-btn" data-theme="indigo">Indigo</button>
-</div>
-
-        <div class="switch-container">
-            <span>Auto Blank</span>
-            <label class="switch">
-                <input type="checkbox" id="autoBlank">
-                <span class="slider"></span>
-            </label>
-        </div>
-
-        <div class="switch-container">
-            <span>Anti Close</span>
-            <label class="switch">
-                <input type="checkbox" id="antiClose">
-                <span class="slider"></span>
-            </label>
-        </div>
+  <!-- SETTINGS BUTTON & PANEL -->
+  <button class="settings-btn">⚙️</button>
+  <div class="overlay"></div>
+  
+  <div class="settings-panel">
+    <div class="settings-header">
+      <span class="settings-title">Settings</span>
+      <button class="close-btn">✖</button>
+    </div>
+    <div class="theme-selector">
+      <h3>Themes</h3>
+      <button class="theme-btn" data-theme="cosmic">Cosmic</button>
+      <button class="theme-btn" data-theme="nebula">Nebula</button>
+      <button class="theme-btn" data-theme="aurora">Aurora</button>
+      <button class="theme-btn" data-theme="solstice">Solstice</button>
+      <button class="theme-btn" data-theme="ocean">Ocean</button>
+      <button class="theme-btn" data-theme="forest">Forest</button>
+      <button class="theme-btn" data-theme="desert">Desert</button>
+      <button class="theme-btn" data-theme="twilight">Twilight</button>
+      <button class="theme-btn" data-theme="mountain">Mountain</button>
+      <button class="theme-btn" data-theme="candy">Candy</button>
+      <button class="theme-btn" data-theme="sunset">Sunset</button>
+      <button class="theme-btn" data-theme="rainforest">Rainforest</button>
+      <button class="theme-btn" data-theme="arctic">Arctic</button>
+      <button class="theme-btn" data-theme="fire">Fire</button>
+      <button class="theme-btn" data-theme="lavender">Lavender</button>
+      <button class="theme-btn" data-theme="mint">Mint</button>
+      <button class="theme-btn" data-theme="stone">Stone</button>
+      <button class="theme-btn" data-theme="citrus">Citrus</button>
+      <button class="theme-btn" data-theme="rose">Rose</button>
+      <button class="theme-btn" data-theme="indigo">Indigo</button>
     </div>
 
-    <script>
-        // Theme configurations
-const themes = {
-  cosmic: {
-    primary: '#9333EA',
-    secondary: '#E879F9',
-    accent: '#F0ABFC',
-    background: '#0A0118'
-  },
-  nebula: {
-    primary: '#3B82F6',
-    secondary: '#60A5FA',
-    accent: '#93C5FD',
-    background: '#010B18'
-  },
-  aurora: {
-    primary: '#10B981',
-    secondary: '#34D399',
-    accent: '#6EE7B7',
-    background: '#011810'
-  },
-  solstice: {
-    primary: '#F59E0B',
-    secondary: '#FACC15',
-    accent: '#FFF59D',
-    background: '#1F1D1A'
-  },
-  ocean: {
-    primary: '#1C4E89',
-    secondary: '#377DC8',
-    accent: '#60A5FA',
-    background: '#082F49'
-  },
-  forest: {
-    primary: '#22C55E',
-    secondary: '#34D399',
-    accent: '#65A30D',
-    background: '#1A2417'
-  },
-  desert: {
-    primary: '#E2725B',
-    secondary: '#FBBF24',
-    accent: '#FDE0A3',
-    background: '#4A3623'
-  },
-  twilight: {
-    primary: '#7C3AED',
-    secondary: '#A855F7',
-    accent: '#D3B4FB',
-    background: '#1E1B22'
-  },
-  mountain: {
-    primary: '#4B5563',
-    secondary: '#6B7280',
-    accent: '#9CA3AF',
-    background: '#1F2937'
-  },
-  candy: {
-    primary: '#EC4899',
-    secondary: '#F87979',
-    accent: '#F0ABFC',
-    background: '#FFFFFF'
-  },
-  // Added Themes
-  sunset: {
-    primary: '#F97316', // Orange
-    secondary: '#FB923C', // Lighter Orange
-    accent: '#FDBA74', // Lightest Orange
-    background: '#281307' // Dark Brown/Orange
-  },
-  rainforest: {
-    primary: '#134E4A', // Dark Teal
-    secondary: '#118C4F', // Teal
-    accent: '#52B788', // Light Teal
-    background: '#042A2B' // Darker Teal
-  },
-  arctic: {
-    primary: '#86E8F4', // Light Blue
-    secondary: '#56C5FF', // Brighter Blue
-    accent: '#26A0FF', // Even Brighter Blue
-    background: '#0A1929' // Dark Blue
-  },
-  fire: {
-    primary: '#E63946', // Red
-    secondary: '#F15152', // Brighter Red
-    accent: '#FF6B6B', // Light Red
-    background: '#1A0604' // Dark Red/Brown
-  },
-  lavender: {
-    primary: '#A855F7', // Lavender
-    secondary: '#C084FC', // Lighter Lavender
-    accent: '#E0BBEA',  // Lightest Lavender
-    background: '#240934' // Dark Purple
-  },
-  mint: {
-    primary: '#34D399', // Mint Green
-    secondary: '#6EE7B7', // Lighter Mint Green
-    accent: '#A7F3D0', // Lightest Mint Green
-    background: '#0F172A' // Dark Blue/Gray
-  },
-  stone: {
-    primary: '#757575', // Gray
-    secondary: '#9E9E9E', // Lighter Gray
-    accent: '#BDBDBD', // Lightest Gray
-    background: '#212121' // Dark Gray
-  },
-  citrus: {
-    primary: '#FACC15', // Yellow
-    secondary: '#FDBA74', // Orange-Yellow
-    accent: '#FEF08A', // Light Yellow
-    background: '#1F1D1A' // Dark Gray/Brown
-  },
-    rose: {
-    primary: '#E91E63', // Pink
-    secondary: '#F06292', // Lighter Pink
-    accent: '#FF84A1', // Lightest Pink
-    background: '#1A0604' // Dark Red/Brown
-  },
-    indigo: {
-    primary: '#4F46E5', // Indigo
-    secondary: '#6366F1', // Lighter Indigo
-    accent: '#818CF8', // Lightest Indigo
-    background: '#1E1B22' // Dark Purple
-  },
-};
-        // Search recommendations
-        const recommendations = []
+    <div class="switch-container">
+      <span>Auto Blank</span>
+      <label class="switch">
+        <input type="checkbox" id="autoBlank"/>
+        <span class="slider"></span>
+      </label>
+    </div>
 
+    <div class="switch-container">
+      <span>Anti Close</span>
+      <label class="switch">
+        <input type="checkbox" id="antiClose"/>
+        <span class="slider"></span>
+      </label>
+    </div>
 
+    <!-- The following line is presumably placeholder text -->
+    oiled up by devi, thug shaked by zenith
+  </div>
 
-        // Elements
-        const searchInput = document.querySelector('.search-input');
-        const recommendationsContainer = document.querySelector('.recommendations');
-        const settingsBtn = document.querySelector('.settings-btn');
-        const settingsPanel = document.querySelector('.settings-panel');
-        const closeBtn = document.querySelector('.close-btn');
-        const overlay = document.querySelector('.overlay');
-        const themeButtons = document.querySelectorAll('.theme-btn');
-        const autoBlankToggle = document.getElementById('autoBlank');
-        const antiCloseToggle = document.getElementById('antiClose');
-        const canvas = document.getElementById('stars-canvas');
-        const ctx = canvas.getContext('2d');
+  <!-- HIDDEN DISPLAY CONTAINER FOR IFRAME -->
+  <div id="display">
+    <div id="toolbar">
+      <span class="material-symbols-outlined toolbar-icon home-icon" onclick="window.location.reload()">
+        home
+      </span>
+      <span class="material-symbols-outlined toolbar-icon refresh-icon" onclick="document.getElementById('mainFrame').contentWindow.location.reload()">
+        refresh
+      </span>
+      <span class="material-symbols-outlined toolbar-icon back-icon" onclick="document.getElementById('mainFrame').contentWindow.history.back()">
+        arrow_back
+      </span>
+      <input 
+        id="input2" 
+        style="width: 65%; position: fixed; top: 2%; left: 20%; padding: 5px; height: 35px; color: white; background-color:#363636; border-radius: 7px; border: none;"
+      />
+      <span class="material-symbols-outlined toolbar-icon forward-icon" style="position: fixed; top: 1%; left: calc(85% + 5px);" 
+            onclick="document.getElementById('mainFrame').contentWindow.history.forward()">
+        arrow_forward
+      </span>
+      <span class="material-symbols-outlined toolbar-icon forward-icon" style="position: fixed; top: 1%; left: calc(85% + 55px);" 
+            onclick="window.location='https://google.com'">
+        hide_image
+      </span>
+    </div>
+    <iframe 
+      id="mainFrame" 
+      src="https://example.com"
+      style="height: 90%; position: fixed; bottom: 0px; width: 100%;">
+    </iframe>
+  </div>
 
-        // Canvas setup
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+  <!-- Scripts -->
+  <script src="./uv/uv.bundle.js"></script>
+  <script src="./uv/uv.config.js"></script>
+  <script src="./assets/register-sw.js"></script>
+  <script>
+    // THEME CONFIGURATIONS
+    const themes = {
+      cosmic:    { primary: '#9333EA', secondary: '#E879F9', accent: '#F0ABFC', background: '#0A0118' },
+      nebula:    { primary: '#3B82F6', secondary: '#60A5FA', accent: '#93C5FD', background: '#010B18' },
+      aurora:    { primary: '#10B981', secondary: '#34D399', accent: '#6EE7B7', background: '#011810' },
+      solstice:  { primary: '#F59E0B', secondary: '#FACC15', accent: '#FFF59D', background: '#1F1D1A' },
+      ocean:     { primary: '#1C4E89', secondary: '#377DC8', accent: '#60A5FA', background: '#082F49' },
+      forest:    { primary: '#22C55E', secondary: '#34D399', accent: '#65A30D', background: '#1A2417' },
+      desert:    { primary: '#E2725B', secondary: '#FBBF24', accent: '#FDE0A3', background: '#4A3623' },
+      twilight:  { primary: '#7C3AED', secondary: '#A855F7', accent: '#D3B4FB', background: '#1E1B22' },
+      mountain:  { primary: '#4B5563', secondary: '#6B7280', accent: '#9CA3AF', background: '#1F2937' },
+      candy:     { primary: '#EC4899', secondary: '#F87979', accent: '#F0ABFC', background: '#FFFFFF' },
 
-        // Star animation
-        class Star {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2;
-                this.speedY = Math.random() * 1 + 0.5;
-                this.opacity = Math.random();
-            }
+      // Extra Themes
+      sunset:    { primary: '#F97316', secondary: '#FB923C', accent: '#FDBA74', background: '#281307' },
+      rainforest:{ primary: '#134E4A', secondary: '#118C4F', accent: '#52B788', background: '#042A2B' },
+      arctic:    { primary: '#86E8F4', secondary: '#56C5FF', accent: '#26A0FF', background: '#0A1929' },
+      fire:      { primary: '#E63946', secondary: '#F15152', accent: '#FF6B6B', background: '#1A0604' },
+      lavender:  { primary: '#A855F7', secondary: '#C084FC', accent: '#E0BBEA', background: '#240934' },
+      mint:      { primary: '#34D399', secondary: '#6EE7B7', accent: '#A7F3D0', background: '#0F172A' },
+      stone:     { primary: '#757575', secondary: '#9E9E9E', accent: '#BDBDBD', background: '#212121' },
+      citrus:    { primary: '#FACC15', secondary: '#FDBA74', accent: '#FEF08A', background: '#1F1D1A' },
+      rose:      { primary: '#E91E63', secondary: '#F06292', accent: '#FF84A1', background: '#1A0604' },
+      indigo:    { primary: '#4F46E5', secondary: '#6366F1', accent: '#818CF8', background: '#1E1B22' },
+    };
 
-            update() {
-                this.y += this.speedY;
-                if (this.y > canvas.height) {
-                    this.y = 0;
-                    this.x = Math.random() * canvas.width;
-                }
-                this.opacity = Math.sin(Date.now() * 0.001 + this.x + this.y) * 0.5 + 0.5;
-            }
+    // AUTOCOMPLETE RECOMMENDATIONS (currently empty array)
+    const recommendations = [];
 
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                ctx.fill();
-            }
-        }
+    // DOM ELEMENTS
+    const searchInput               = document.querySelector('.search-input');
+    const recommendationsContainer  = document.querySelector('.recommendations');
+    const settingsBtn               = document.querySelector('.settings-btn');
+    const settingsPanel             = document.querySelector('.settings-panel');
+    const closeBtn                  = document.querySelector('.close-btn');
+    const overlay                   = document.querySelector('.overlay');
+    const themeButtons              = document.querySelectorAll('.theme-btn');
+    const autoBlankToggle           = document.getElementById('autoBlank');
+    const antiCloseToggle           = document.getElementById('antiClose');
 
-        const stars = Array.from({ length: 200 }, () => new Star());
-
-        function animate() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            stars.forEach(star => {
-                star.update();
-                star.draw();
-            });
-
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-searchInput.addEventListener('input', (e) => {
-    const userData = e.target.value;
-
-    if (userData) {
-        fetch("https://corsproxy.io/https://rizzmass.huh.loseyourip.com/search_complete/" + encodeURIComponent(userData))
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.text(); // Get the response as text
-            })
-            .then(data => {
-                try {
-                    const jsonData = JSON.parse(data);
-                    const suggestions = jsonData[1];
-
-                    if (suggestions && suggestions.length) {
-                        recommendationsContainer.innerHTML = suggestions.slice(0,5)
-                            .map(suggestion => {
-                                // Handle cases where a suggestion is an array (e.g., with markup)
-                                const suggestionText = Array.isArray(suggestion) ? suggestion[0] : suggestion;
-                                return `<div class="recommendation-item">${suggestionText}</div>`;
-                            })
-                            .join('');
-                        recommendationsContainer.style.display = 'block';
-                    } else {
-                        recommendationsContainer.style.display = 'none';
-                    }
-                } catch (error) {
-                    console.error("Error parsing JSON:", error, data);  // Log the raw data for debugging
-                    recommendationsContainer.style.display = 'none'; // Hide on parse error
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching or processing autocomplete data:", error);
-                recommendationsContainer.style.display = 'none';
-            });
-    } else {
+    // AUTOCOMPLETE FUNCTIONALITY
+    searchInput.addEventListener('input', (e) => {
+      const userData = e.target.value.trim();
+      if (!userData) {
         recommendationsContainer.style.display = 'none';
+        return;
+      }
+
+      fetch("https://corsproxy.io/https://rizzmass.huh.loseyourip.com/search_complete/" + encodeURIComponent(userData))
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then(data => {
+          try {
+            const jsonData = JSON.parse(data);
+            const suggestions = jsonData[1];
+            if (suggestions && suggestions.length) {
+              recommendationsContainer.innerHTML = suggestions
+                .slice(0,5)
+                .map(suggestion => {
+                  const suggestionText = Array.isArray(suggestion) ? suggestion[0] : suggestion;
+                  return `<div class="recommendation-item">${suggestionText}</div>`;
+                })
+                .join('');
+              recommendationsContainer.style.display = 'block';
+            } else {
+              recommendationsContainer.style.display = 'none';
+            }
+          } catch (error) {
+            console.error("Error parsing JSON:", error, data);
+            recommendationsContainer.style.display = 'none';
+          }
+        })
+        .catch(error => {
+          console.error("Error fetching or processing autocomplete data:", error);
+          recommendationsContainer.style.display = 'none';
+        });
+    });
+
+    // HANDLE SEARCH ON ENTER
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        // Poll for the mainFrame src to update input2
+        setInterval(function(){
+          let src = document.getElementById("mainFrame").src;
+          if (!src.startsWith("https://")) {
+            src = Ultraviolet.codec.xor.encode(src);
+          }
+          document.getElementById("input2").value = src;
+        },50);
+        handleSearch(searchInput.value);
+      }
+    });
+
+    // SEARCH FUNCTION
+    function handleSearch(query) {
+      console.log(`Search query: ${query}`);
+      // If user typed something that doesn't look like a URL
+      if (!query.includes(".") && !query.startsWith("https://")) {
+        query = "https://google.com/search?q=" + encodeURIComponent(query);
+      }
+      document.getElementById("display").style.display = "block";
+      document.getElementById("mainFrame").style.display = "block";
+
+      // Encode the full query for UV
+      const encodedQuery = Ultraviolet.codec.xor.encode(query);
+      document.getElementById("mainFrame").src = `/service/${encodedQuery}`;
     }
-});
 
-        searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                handleSearch(searchInput.value);
-            }
-        });
+    // CLICK ON A RECOMMENDATION
+    recommendationsContainer.addEventListener('click', (e) => {
+      if (e.target.classList.contains('recommendation-item')) {
+        searchInput.value = e.target.textContent;
+        recommendationsContainer.style.display = 'none';
+      }
+    });
 
-                function handleSearch(query) {
-            console.log(`Search query: ${query}`);
-            window.location = `/service/${Ultraviolet.codec.xor.encode(query)}`; // use uv prefix and encode using the uv codec
-        }
+    // SETTINGS PANEL FUNCTIONALITY
+    settingsBtn.addEventListener('click', () => {
+      settingsPanel.style.display = 'block';
+      overlay.style.display = 'block';
+    });
+    closeBtn.addEventListener('click', () => {
+      settingsPanel.style.display = 'none';
+      overlay.style.display = 'none';
+    });
+    overlay.addEventListener('click', () => {
+      settingsPanel.style.display = 'none';
+      overlay.style.display = 'none';
+    });
 
-        // Click handlers for recommendations
-        recommendationsContainer.addEventListener('click', (e) => {
-            if (e.target.classList.contains('recommendation-item')) {
-                searchInput.value = e.target.textContent;
-                recommendationsContainer.style.display = 'none';
-            }
-        });
+    // THEME SWITCHING
+    function setTheme(themeName) {
+      const theme = themes[themeName];
+      document.documentElement.style.setProperty('--primary', theme.primary);
+      document.documentElement.style.setProperty('--secondary', theme.secondary);
+      document.documentElement.style.setProperty('--accent', theme.accent);
+      document.documentElement.style.setProperty('--background', theme.background);
+    }
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        setTheme(btn.dataset.theme);
+      });
+    });
 
-        // Settings panel
-        settingsBtn.addEventListener('click', () => {
-            settingsPanel.style.display = 'block';
-            overlay.style.display = 'block';
-        });
+    // ANTI-CLOSE (PREVENTS ACCIDENTAL TAB CLOSE)
+    antiCloseToggle.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        window.addEventListener('beforeunload', beforeUnloadHandler);
+      } else {
+        window.removeEventListener('beforeunload', beforeUnloadHandler);
+      }
+    });
+    function beforeUnloadHandler(e) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
 
-        closeBtn.addEventListener('click', () => {
-            settingsPanel.style.display = 'none';
-            overlay.style.display = 'none';
-        });
+    // TOOLBAR INPUT2 ENTER
+    document.getElementById('input2').addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleSearch(document.getElementById("input2").value);
+      }
+    });
 
-        overlay.addEventListener('click', () => {
-            settingsPanel.style.display = 'none';
-            overlay.style.display = 'none';
-        });
-
-        // Theme switching
-        function setTheme(themeName) {
-            const theme = themes[themeName];
-            document.documentElement.style.setProperty('--primary', theme.primary);
-            document.documentElement.style.setProperty('--secondary', theme.secondary);
-            document.documentElement.style.setProperty('--accent', theme.accent);
-            document.documentElement.style.setProperty('--background', theme.background);
-        }
-
-        themeButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                setTheme(btn.dataset.theme);
-            });
-        });
-
-        // Anti-close functionality
-        antiCloseToggle.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                window.addEventListener('beforeunload', (e) => {
-                    e.preventDefault();
-                    e.returnValue = '';
-                });
-            }
-        });
-
-        // Click outside to close recommendations
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.search-container')) {
-                recommendationsContainer.style.display = 'none';
-            }
-        });
-    </script>
-    <script src="./assets/script.js" defer></script>
+    // CLICK OUTSIDE TO CLOSE AUTOCOMPLETE
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.search-container')) {
+        recommendationsContainer.style.display = 'none';
+      }
+    });
+  </script>
+  <script src="./assets/script.js" defer></script>
 </body>
 </html>
