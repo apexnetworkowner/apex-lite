@@ -240,6 +240,50 @@
             display: none;
             z-index: 5;
         }
+		.theme-selector {
+  overflow-y: scroll;
+  /* Other styles for your theme selector */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: var(--scrollbar-thumb-color) var(--scrollbar-track-color); /* Firefox */
+}
+
+.theme-selector::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.theme-selector::-webkit-scrollbar-track {
+  background: var(--scrollbar-track-color); /* Color of the track */
+}
+
+.theme-selector::-webkit-scrollbar-thumb {
+  background-color: var(--scrollbar-thumb-color); /* Color of the thumb */
+  border-radius: 4px; /* Rounded corners for the thumb */
+}
+
+.theme-selector::-webkit-scrollbar-thumb:hover {
+  background-color: var(--scrollbar-thumb-hover-color); /* Color of the thumb on hover */
+}
+
+/* Define your color variables.  These can be tied to your themes if you want. */
+:root {
+  --scrollbar-thumb-color: #9CA3AF; /* Example: Light gray */
+  --scrollbar-track-color: #1F2937; /* Example: Darker gray */
+  --scrollbar-thumb-hover-color: #757575; /* Example: Slightly darker gray */
+}
+
+/* Example of how to tie the scrollbar colors to a theme (e.g. 'cosmic') */
+body.cosmic-theme { /* Assuming you add a class to the body */
+    --scrollbar-thumb-color: #E879F9;
+    --scrollbar-track-color: #0A0118;
+    --scrollbar-thumb-hover-color: #F0ABFC;
+}
+
+/* And other themes... */
+body.nebula-theme {
+    --scrollbar-thumb-color: #60A5FA;
+    --scrollbar-track-color: #010B18;
+    --scrollbar-thumb-hover-color: #93C5FD;
+}
     </style>
 </head>
 <body>
@@ -266,13 +310,29 @@
             <span class="settings-title">Settings</span>
             <button class="close-btn">✖</button>
         </div>
-        
-        <div class="theme-selector">
-            <h3>Themes</h3>
-            <button class="theme-btn" data-theme="cosmic">Cosmic</button>
-            <button class="theme-btn" data-theme="nebula">Nebula</button>
-            <button class="theme-btn" data-theme="aurora">Aurora</button>
-        </div>
+<div class="theme-selector" style="overflow-y: scroll;">
+  <h3>Themes</h3>
+  <button class="theme-btn" data-theme="cosmic">Cosmic</button>
+  <button class="theme-btn" data-theme="nebula">Nebula</button>
+  <button class="theme-btn" data-theme="aurora">Aurora</button>
+  <button class="theme-btn" data-theme="solstice">Solstice</button>
+  <button class="theme-btn" data-theme="ocean">Ocean</button>
+  <button class="theme-btn" data-theme="forest">Forest</button>
+  <button class="theme-btn" data-theme="desert">Desert</button>
+  <button class="theme-btn" data-theme="twilight">Twilight</button>
+  <button class="theme-btn" data-theme="mountain">Mountain</button>
+  <button class="theme-btn" data-theme="candy">Candy</button>
+  <button class="theme-btn" data-theme="sunset">Sunset</button>
+  <button class="theme-btn" data-theme="rainforest">Rainforest</button>
+  <button class="theme-btn" data-theme="arctic">Arctic</button>
+  <button class="theme-btn" data-theme="fire">Fire</button>
+  <button class="theme-btn" data-theme="lavender">Lavender</button>
+  <button class="theme-btn" data-theme="mint">Mint</button>
+  <button class="theme-btn" data-theme="stone">Stone</button>
+  <button class="theme-btn" data-theme="citrus">Citrus</button>
+  <button class="theme-btn" data-theme="rose">Rose</button>
+  <button class="theme-btn" data-theme="indigo">Indigo</button>
+</div>
 
         <div class="switch-container">
             <span>Auto Blank</span>
@@ -293,36 +353,133 @@
 
     <script>
         // Theme configurations
-        const themes = {
-            cosmic: {
-                primary: '#9333EA',
-                secondary: '#E879F9',
-                accent: '#F0ABFC',
-                background: '#0A0118'
-            },
-            nebula: {
-                primary: '#3B82F6',
-                secondary: '#60A5FA',
-                accent: '#93C5FD',
-                background: '#010B18'
-            },
-            aurora: {
-                primary: '#10B981',
-                secondary: '#34D399',
-                accent: '#6EE7B7',
-                background: '#011810'
-            }
-        };
-
+const themes = {
+  cosmic: {
+    primary: '#9333EA',
+    secondary: '#E879F9',
+    accent: '#F0ABFC',
+    background: '#0A0118'
+  },
+  nebula: {
+    primary: '#3B82F6',
+    secondary: '#60A5FA',
+    accent: '#93C5FD',
+    background: '#010B18'
+  },
+  aurora: {
+    primary: '#10B981',
+    secondary: '#34D399',
+    accent: '#6EE7B7',
+    background: '#011810'
+  },
+  solstice: {
+    primary: '#F59E0B',
+    secondary: '#FACC15',
+    accent: '#FFF59D',
+    background: '#1F1D1A'
+  },
+  ocean: {
+    primary: '#1C4E89',
+    secondary: '#377DC8',
+    accent: '#60A5FA',
+    background: '#082F49'
+  },
+  forest: {
+    primary: '#22C55E',
+    secondary: '#34D399',
+    accent: '#65A30D',
+    background: '#1A2417'
+  },
+  desert: {
+    primary: '#E2725B',
+    secondary: '#FBBF24',
+    accent: '#FDE0A3',
+    background: '#4A3623'
+  },
+  twilight: {
+    primary: '#7C3AED',
+    secondary: '#A855F7',
+    accent: '#D3B4FB',
+    background: '#1E1B22'
+  },
+  mountain: {
+    primary: '#4B5563',
+    secondary: '#6B7280',
+    accent: '#9CA3AF',
+    background: '#1F2937'
+  },
+  candy: {
+    primary: '#EC4899',
+    secondary: '#F87979',
+    accent: '#F0ABFC',
+    background: '#FFFFFF'
+  },
+  // Added Themes
+  sunset: {
+    primary: '#F97316', // Orange
+    secondary: '#FB923C', // Lighter Orange
+    accent: '#FDBA74', // Lightest Orange
+    background: '#281307' // Dark Brown/Orange
+  },
+  rainforest: {
+    primary: '#134E4A', // Dark Teal
+    secondary: '#118C4F', // Teal
+    accent: '#52B788', // Light Teal
+    background: '#042A2B' // Darker Teal
+  },
+  arctic: {
+    primary: '#86E8F4', // Light Blue
+    secondary: '#56C5FF', // Brighter Blue
+    accent: '#26A0FF', // Even Brighter Blue
+    background: '#0A1929' // Dark Blue
+  },
+  fire: {
+    primary: '#E63946', // Red
+    secondary: '#F15152', // Brighter Red
+    accent: '#FF6B6B', // Light Red
+    background: '#1A0604' // Dark Red/Brown
+  },
+  lavender: {
+    primary: '#A855F7', // Lavender
+    secondary: '#C084FC', // Lighter Lavender
+    accent: '#E0BBEA',  // Lightest Lavender
+    background: '#240934' // Dark Purple
+  },
+  mint: {
+    primary: '#34D399', // Mint Green
+    secondary: '#6EE7B7', // Lighter Mint Green
+    accent: '#A7F3D0', // Lightest Mint Green
+    background: '#0F172A' // Dark Blue/Gray
+  },
+  stone: {
+    primary: '#757575', // Gray
+    secondary: '#9E9E9E', // Lighter Gray
+    accent: '#BDBDBD', // Lightest Gray
+    background: '#212121' // Dark Gray
+  },
+  citrus: {
+    primary: '#FACC15', // Yellow
+    secondary: '#FDBA74', // Orange-Yellow
+    accent: '#FEF08A', // Light Yellow
+    background: '#1F1D1A' // Dark Gray/Brown
+  },
+    rose: {
+    primary: '#E91E63', // Pink
+    secondary: '#F06292', // Lighter Pink
+    accent: '#FF84A1', // Lightest Pink
+    background: '#1A0604' // Dark Red/Brown
+  },
+    indigo: {
+    primary: '#4F46E5', // Indigo
+    secondary: '#6366F1', // Lighter Indigo
+    accent: '#818CF8', // Lightest Indigo
+    background: '#1E1B22' // Dark Purple
+  },
+};
         // Search recommendations
-        const recommendations = [
-            "Unblock websites",
-            "Bypass restrictions",
-            "Anonymous browsing",
-            "Secure connection",
-            "Hide IP address",
-            "Access blocked content"
-        ];
+        const recommendations = []
+
+
 
         // Elements
         const searchInput = document.querySelector('.search-input');
@@ -387,26 +544,47 @@
         }
         animate();
 
-        // Search functionality
-        searchInput.addEventListener('input', (e) => {
-            const value = e.target.value.toLowerCase();
-            if (value) {
-                const filtered = recommendations.filter(rec => 
-                    rec.toLowerCase().includes(value)
-                );
-                
-                if (filtered.length) {
-                    recommendationsContainer.innerHTML = filtered
-                        .map(rec => `<div class="recommendation-item">${rec}</div>`)
-                        .join('');
-                    recommendationsContainer.style.display = 'block';
-                } else {
-                    recommendationsContainer.style.display = 'none';
+searchInput.addEventListener('input', (e) => {
+    const userData = e.target.value;
+
+    if (userData) {
+        fetch("https://corsproxy.io/https://rizzmass.huh.loseyourip.com/search_complete/" + encodeURIComponent(userData))
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-            } else {
+                return response.text(); // Get the response as text
+            })
+            .then(data => {
+                try {
+                    const jsonData = JSON.parse(data);
+                    const suggestions = jsonData[1];
+
+                    if (suggestions && suggestions.length) {
+                        recommendationsContainer.innerHTML = suggestions.slice(0,5)
+                            .map(suggestion => {
+                                // Handle cases where a suggestion is an array (e.g., with markup)
+                                const suggestionText = Array.isArray(suggestion) ? suggestion[0] : suggestion;
+                                return `<div class="recommendation-item">${suggestionText}</div>`;
+                            })
+                            .join('');
+                        recommendationsContainer.style.display = 'block';
+                    } else {
+                        recommendationsContainer.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error("Error parsing JSON:", error, data);  // Log the raw data for debugging
+                    recommendationsContainer.style.display = 'none'; // Hide on parse error
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching or processing autocomplete data:", error);
                 recommendationsContainer.style.display = 'none';
-            }
-        });
+            });
+    } else {
+        recommendationsContainer.style.display = 'none';
+    }
+});
 
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
@@ -417,7 +595,7 @@
 
         function handleSearch(query) {
             console.log(`Search query: ${query}`);
-            // Add your search handling logic here
+            window.location = `/service/${Ultraviolet.codec.xor.encode(url)}`; // use uv prefix and encode using the uv codec
         }
 
         // Click handlers for recommendations
