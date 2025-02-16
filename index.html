@@ -593,9 +593,9 @@ searchInput.addEventListener('input', (e) => {
             }
         });
 
-        function handleSearch(query) {
+                function handleSearch(query) {
             console.log(`Search query: ${query}`);
-            window.location = `/service/${Ultraviolet.codec.xor.encode(url)}`; // use uv prefix and encode using the uv codec
+            window.location = `/service/${Ultraviolet.codec.xor.encode(query)}`; // use uv prefix and encode using the uv codec
         }
 
         // Click handlers for recommendations
